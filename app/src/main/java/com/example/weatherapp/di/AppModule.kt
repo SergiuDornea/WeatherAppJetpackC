@@ -2,6 +2,7 @@ package com.example.weatherapp.di
 
 import com.example.weatherapp.network.WeatherApi
 import com.example.weatherapp.utils.Constants
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,9 +13,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface AppModule {
-    @Provides
+object AppModule {
+
     @Singleton
+    @Provides
     fun provideOpenWeatherApi(): WeatherApi{
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
