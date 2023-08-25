@@ -8,6 +8,5 @@ import com.example.weatherapp.navigation.ShowData
 
 @Composable
 fun WeatherMainScreen(navController: NavController, mainViewModel: MainViewModel = hiltViewModel()){
-    Text(text = "Main screen")
     ShowData(mainViewModel = mainViewModel)
 }

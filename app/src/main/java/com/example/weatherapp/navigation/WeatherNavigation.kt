@@ -35,12 +35,12 @@ fun WeatherNavigation() {
 fun ShowData(mainViewModel: MainViewModel){
     val weatherData = produceState<DataOrException<CityWeather,Boolean, Exception>>(
         initialValue = DataOrException(loading = true)){
-        value = mainViewModel.data.value
+        value = mainViewModel.getWeatherData(city = "Bucharest")
     }.value
 
     if(weatherData.loading == true){
         CircularProgressIndicator()
     }else if(weatherData.data != null){
-        Text("Main Screen ${weatherData.data!!.main.temp}")
+        Text(" ${weatherData.data.toString()}")
     }
 }
