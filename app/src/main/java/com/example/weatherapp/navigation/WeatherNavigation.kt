@@ -31,16 +31,3 @@ fun WeatherNavigation() {
     }
 }
 
-@Composable
-fun ShowData(mainViewModel: MainViewModel){
-    val weatherData = produceState<DataOrException<CityWeather,Boolean, Exception>>(
-        initialValue = DataOrException(loading = true)){
-        value = mainViewModel.getWeatherData(city = "Bucharest")
-    }.value
-
-    if(weatherData.loading == true){
-        CircularProgressIndicator()
-    }else if(weatherData.data != null){
-        Text(" ${weatherData.data.toString()}")
-    }
-}
