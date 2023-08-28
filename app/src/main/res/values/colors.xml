@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="egg">#f0edeb</color>
+    <color name="pistacio">#768385</color>
+    <color name="baby_blue">#718dbd</color>
+    <color name="light_purple">#77779c</color>
+    <color name="dark_purple">#26243b</color>
 </resources>
