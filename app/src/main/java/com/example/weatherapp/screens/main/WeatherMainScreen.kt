@@ -10,13 +10,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -25,12 +28,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +40,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.data.DataOrException
 import com.example.weatherapp.model.CityWeather
 import com.example.weatherapp.widgets.CustomDivider
+import com.example.weatherapp.widgets.CustomListITem
 import com.example.weatherapp.widgets.WeatherAppBar
 import com.example.weatherapp.widgets.WeatherDetails
 
@@ -80,6 +82,17 @@ fun MainScaffold(weather: CityWeather , navController: NavController){
 fun MainContent(
     data: CityWeather
 ) {
+    val dataList = listOf(
+        data.coord.lat.toString(),
+        data.coord.lon.toString(),
+        data.base,
+        data.main.feels_like.toString(),
+        data.main.temp_min.toString(),
+        data.main.temp_max.toString(),
+        data.visibility.toString(),
+        data.clouds.toString(),
+        data.timezone.toString()
+        )
     Box(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.light_purple)),
@@ -142,9 +155,12 @@ fun MainContent(
 
             }
 
+            // TODO get the actual data
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 6.dp, end = 6.dp)
                 ) {
                 WeatherDetails(
                     img =painterResource(id = R.drawable.pressure) ,
@@ -159,13 +175,43 @@ fun MainContent(
                     )
             }
             CustomDivider()
+            // TODO get the actual data
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 6.dp, end = 6.dp)
+            ) {
+                WeatherDetails(
+                    img =painterResource(id = R.drawable.sunrise) ,
+                    description = "06:12 AM"
+                )
+                WeatherDetails(
+                    img =painterResource(id = R.drawable.sunset) ,
+                    description = "09:00 PM"
+                )
 
+            }
+            // TODO add a  lazy list , and replace dummy data
+            Text(text = "More info")
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(top = 15.dp)
+            ){
+                items(items = dataList){
+                    CustomListITem(data = it)
+                }
+            }
         }
 
 
-    }
+        }
+
 
 
 
 
 }
+
