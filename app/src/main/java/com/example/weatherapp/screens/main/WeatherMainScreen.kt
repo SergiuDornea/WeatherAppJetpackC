@@ -3,7 +3,6 @@ package com.example.weatherapp.screens.main
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,8 +37,10 @@ import androidx.navigation.NavController
 import com.example.weatherapp.R
 import com.example.weatherapp.data.DataOrException
 import com.example.weatherapp.model.CityWeather
+import com.example.weatherapp.utils.getDateTime
 import com.example.weatherapp.widgets.CustomDivider
 import com.example.weatherapp.widgets.CustomListITem
+import com.example.weatherapp.widgets.CustomWeatherImgDescriber
 import com.example.weatherapp.widgets.WeatherAppBar
 import com.example.weatherapp.widgets.WeatherDetails
 
@@ -103,15 +103,15 @@ fun MainContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // TODO get the date and format it
+
             Text(
-                text = "Mon, Nov 28",
+                text = getDateTime(data.dt, "EEE, MMM d"),
                 modifier = Modifier
                     .padding(top = 70.dp),
                 color = colorResource(id = R.color.egg),
                 fontWeight = FontWeight.SemiBold,
                 fontStyle = FontStyle.Italic
-                
+
             )
 
             Surface(
@@ -129,23 +129,38 @@ fun MainContent(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     //TODO make photo change according to the data
-                    Image(
-                        painter = painterResource(id = R.drawable.sunny),
-                        contentDescription = "weather img",
-                        modifier = Modifier
-                            .size(50.dp)
-                        )
-                    //TODO get the temp
+                    when(data.weather[0].main){
+                        "Clouds" -> if(data.weather[0].description == "broken clouds"){
+                            CustomWeatherImgDescriber(img = painterResource(id = R.drawable.clear_sky))
+                        }else{
+                            CustomWeatherImgDescriber(img = painterResource(id = R.drawable.cloudy))
+                        }
+                        "Rain" -> if(data.weather[0].description == "light rain"){
+                            CustomWeatherImgDescriber(img = painterResource(id = R.drawable.light_rain))
+                        }else{
+                            CustomWeatherImgDescriber(img = painterResource(id = R.drawable.storm))
+                        }
+                        "Snow" -> CustomWeatherImgDescriber(img = painterResource(id = R.drawable.snow))
+                        "Clear" -> CustomWeatherImgDescriber(img = painterResource(id = R.drawable.sunny))
+
+                        else -> {
+                            CustomWeatherImgDescriber(img = painterResource(id = R.drawable.cloudy))
+                        }
+                    }
+
+
+
+
                     Text(
-                        text = "24°",
+                        text = data.main.temp.toString()  + "°",
                         color = colorResource(id = R.color.egg),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.padding(top = 5.dp))
-                    // TODO get the weather status
+
                     Text(
-                        text = "Sunny",
+                        text = data.weather.get(0).main,
                         color = colorResource(id = R.color.egg),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium
@@ -155,7 +170,7 @@ fun MainContent(
 
             }
 
-            // TODO get the actual data
+            // pressure, humidity, wind
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
@@ -164,18 +179,18 @@ fun MainContent(
                 ) {
                 WeatherDetails(
                     img =painterResource(id = R.drawable.pressure) ,
-                    description = "124 Psi"
+                    description = data.main.pressure.toString() + " psi"
                 )
                 WeatherDetails(
                     img =painterResource(id = R.drawable.humidity) ,
-                    description = "17%"
+                    description = data.main.humidity.toString() + " %"
                      )
                 WeatherDetails(img =painterResource(id = R.drawable.wind) ,
-                    description = "10 km/h"
+                    description = data.wind.speed.toString() + " km/h"
                     )
             }
             CustomDivider()
-            // TODO get the actual data
+            // sunset and sunrise
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
@@ -184,11 +199,12 @@ fun MainContent(
             ) {
                 WeatherDetails(
                     img =painterResource(id = R.drawable.sunrise) ,
-                    description = "06:12 AM"
+                    description = getDateTime(data.sys.sunrise, "hh:mm aa")
                 )
+
                 WeatherDetails(
                     img =painterResource(id = R.drawable.sunset) ,
-                    description = "09:00 PM"
+                    description = getDateTime(data.sys.sunset, "hh:mm aa")
                 )
 
             }
@@ -214,4 +230,5 @@ fun MainContent(
 
 
 }
+
 
