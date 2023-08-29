@@ -12,12 +12,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -26,10 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,7 +41,6 @@ import com.example.weatherapp.data.DataOrException
 import com.example.weatherapp.model.CityWeather
 import com.example.weatherapp.utils.getDateTime
 import com.example.weatherapp.widgets.CustomDivider
-import com.example.weatherapp.widgets.CustomListITem
 import com.example.weatherapp.widgets.CustomWeatherImgDescriber
 import com.example.weatherapp.widgets.WeatherAppBar
 import com.example.weatherapp.widgets.WeatherDetails
@@ -49,7 +50,7 @@ fun WeatherMainScreen(navController: NavController, mainViewModel: MainViewModel
     val weatherData = produceState<DataOrException<CityWeather,Boolean, Exception>>(
         initialValue = DataOrException(loading = true)
     ){
-        value = mainViewModel.getWeatherData(city = "Bucharest")
+        value = mainViewModel.getWeatherData(city = "Cluj")
     }.value
 
     if(weatherData.loading == true){
@@ -120,7 +121,7 @@ fun MainContent(
                 modifier = Modifier
                     .padding(10.dp)
                     .size(200.dp),
-                border = BorderStroke(width = 3.dp, color = colorResource(id = R.color.dark_purple) )
+                border = BorderStroke(width = 3.dp, color = colorResource(id = R.color.dark_purple))
 
             ) {
 
@@ -128,18 +129,15 @@ fun MainContent(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    //TODO make photo change according to the data
-                    when(data.weather[0].main){
-                        "Clouds" -> if(data.weather[0].description == "broken clouds"){
+
+                    when (data.weather[0].main) {
+                        "Clouds" -> if (data.weather[0].description == "broken clouds") {
                             CustomWeatherImgDescriber(img = painterResource(id = R.drawable.clear_sky))
-                        }else{
+                        } else {
                             CustomWeatherImgDescriber(img = painterResource(id = R.drawable.cloudy))
                         }
-                        "Rain" -> if(data.weather[0].description == "light rain"){
-                            CustomWeatherImgDescriber(img = painterResource(id = R.drawable.light_rain))
-                        }else{
-                            CustomWeatherImgDescriber(img = painterResource(id = R.drawable.storm))
-                        }
+                        "Rain" -> CustomWeatherImgDescriber(img = painterResource(id = R.drawable.light_rain))
+                        "Thunderstorm" -> CustomWeatherImgDescriber(img = painterResource(id = R.drawable.storm))
                         "Snow" -> CustomWeatherImgDescriber(img = painterResource(id = R.drawable.snow))
                         "Clear" -> CustomWeatherImgDescriber(img = painterResource(id = R.drawable.sunny))
 
@@ -152,7 +150,7 @@ fun MainContent(
 
 
                     Text(
-                        text = data.main.temp.toString()  + "°",
+                        text = data.main.temp.toString() + "°",
                         color = colorResource(id = R.color.egg),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold
@@ -160,7 +158,7 @@ fun MainContent(
                     Spacer(modifier = Modifier.padding(top = 5.dp))
 
                     Text(
-                        text = data.weather.get(0).main,
+                        text = data.weather[0].main,
                         color = colorResource(id = R.color.egg),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium
@@ -176,18 +174,19 @@ fun MainContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 6.dp, end = 6.dp)
-                ) {
+            ) {
                 WeatherDetails(
-                    img =painterResource(id = R.drawable.pressure) ,
+                    img = painterResource(id = R.drawable.pressure),
                     description = data.main.pressure.toString() + " psi"
                 )
                 WeatherDetails(
-                    img =painterResource(id = R.drawable.humidity) ,
+                    img = painterResource(id = R.drawable.humidity),
                     description = data.main.humidity.toString() + " %"
-                     )
-                WeatherDetails(img =painterResource(id = R.drawable.wind) ,
+                )
+                WeatherDetails(
+                    img = painterResource(id = R.drawable.wind),
                     description = data.wind.speed.toString() + " km/h"
-                    )
+                )
             }
             CustomDivider()
             // sunset and sunrise
@@ -198,35 +197,89 @@ fun MainContent(
                     .padding(start = 6.dp, end = 6.dp)
             ) {
                 WeatherDetails(
-                    img =painterResource(id = R.drawable.sunrise) ,
+                    img = painterResource(id = R.drawable.sunrise),
                     description = getDateTime(data.sys.sunrise, "hh:mm aa")
                 )
 
                 WeatherDetails(
-                    img =painterResource(id = R.drawable.sunset) ,
+                    img = painterResource(id = R.drawable.sunset),
                     description = getDateTime(data.sys.sunset, "hh:mm aa")
                 )
 
             }
-            // TODO add a  lazy list , and replace dummy data
-            Text(text = "More info")
-            LazyColumn(
+            // TODO add a  more info section , and replace dummy data
+            Divider(
+                thickness = 3.dp,
+                color = colorResource(id = R.color.dark_purple),
+                modifier = Modifier.padding(top = 10.dp)
+
+                )
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .padding(top = 15.dp)
-            ){
-                items(items = dataList){
-                    CustomListITem(data = it)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                colorResource(id = R.color.baby_blue),
+                                colorResource(id = R.color.light_purple),
+                                colorResource(id = R.color.dark_purple),
+
+                                )
+                        )
+                    ),
+                contentAlignment = Alignment.TopCenter
+
+            ) {
+                Column {
+                    Text(
+                        text = "More info:",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .padding(top = 10.dp),
+                    )
+                    Text(
+                        text = "Description: "  + data.weather[0].description,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                    )
+
+                    Text(
+                        text = "Feels like: "  + data.main.feels_like,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                    )
+                    Text(
+                        text = "Max temp: "  + data.main.temp_max,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                    )
+                    Text(
+                        text = "Min temp: " + data.main.temp_min,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                    )
                 }
+
+
+
             }
-        }
 
 
         }
 
 
-
+    }
 
 
 }
