@@ -12,6 +12,7 @@ import com.example.weatherapp.data.DataOrException
 import com.example.weatherapp.model.CityWeather
 import com.example.weatherapp.screens.main.MainViewModel
 import com.example.weatherapp.screens.main.WeatherMainScreen
+import com.example.weatherapp.screens.search.WeatherSearchScreen
 import com.example.weatherapp.screens.splash.WeatherSplashScreen
 
 @Composable
@@ -26,6 +27,11 @@ fun WeatherNavigation() {
             // create the actual screen
             val mainViewModel = hiltViewModel<MainViewModel>()
             WeatherMainScreen(navController = navController, mainViewModel )
+        }
+
+        composable(WeatherScreens.SearchScreen.name){
+            // create the actual screen
+            WeatherSearchScreen()
 
         }
     }

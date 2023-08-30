@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_EXPRESSION")
+
 package com.example.weatherapp.widgets
 
 import androidx.compose.foundation.clickable
@@ -8,7 +10,6 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -17,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.weatherapp.R
 
@@ -26,9 +25,9 @@ import com.example.weatherapp.R
 //@Preview
 @Composable
 fun WeatherAppBar(
-    title : String,
-    icon : ImageVector? = null,
-    isOnMainScreen : Boolean = true,
+    title: String,
+    icon: ImageVector? = null,
+    isOnMainScreen: Boolean = true,
     navController: NavController,
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
@@ -47,10 +46,10 @@ fun WeatherAppBar(
         ),
         actions = {
                   if(isOnMainScreen){
-                      IconButton(onClick = { /*TODO*/ }) {
+                      IconButton(onClick = { onAddActionClicked()}) {
                           Icon(imageVector =  Icons.Default.Search, contentDescription = "Search icon")
                       }
-                      IconButton(onClick = { /*TODO*/ }) {
+                      IconButton(onClick = { onButtonClicked() }) {
                           Icon(imageVector =  Icons.Rounded.MoreVert, contentDescription = "More icon")
                       }
                   }else{

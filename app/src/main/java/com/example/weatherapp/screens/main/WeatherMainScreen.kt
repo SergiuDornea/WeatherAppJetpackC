@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -31,7 +30,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,6 +37,7 @@ import androidx.navigation.NavController
 import com.example.weatherapp.R
 import com.example.weatherapp.data.DataOrException
 import com.example.weatherapp.model.CityWeather
+import com.example.weatherapp.navigation.WeatherScreens
 import com.example.weatherapp.utils.getDateTime
 import com.example.weatherapp.widgets.CustomDivider
 import com.example.weatherapp.widgets.CustomWeatherImgDescriber
@@ -67,9 +66,13 @@ fun WeatherMainScreen(navController: NavController, mainViewModel: MainViewModel
 fun MainScaffold(weather: CityWeather , navController: NavController){
 
     Scaffold(topBar = {
-        WeatherAppBar(navController = navController,
+        WeatherAppBar(
+            navController = navController,
             title = weather.name + ", " + weather.sys.country,
 //            icon = Icons.Default.ArrowBack,
+        onAddActionClicked = {
+            navController.navigate(WeatherScreens.SearchScreen.name)
+        }
         ){
             Log.d("TAG", "MainScaffold: Button clicked")
         }
