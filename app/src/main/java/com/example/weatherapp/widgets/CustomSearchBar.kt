@@ -29,6 +29,7 @@ import com.example.weatherapp.R
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CustomSearchBar (
+    modifier: Modifier = Modifier,
     onSearch: (String) -> Unit = {}
         ){
     // if phone rotated, do not lose data typed by user
@@ -39,8 +40,19 @@ fun CustomSearchBar (
     val valid = remember(searchQueryState.value) {
         searchQueryState.value.trim().isNotEmpty()
     }
-    Column {
+    Column(modifier = Modifier.padding(top = 100.dp)) {
         CustomTextField(
+            valueState = searchQueryState,
+            placeholder = "Cluj",
+            onAction = KeyboardActions {
+                if(!valid){
+                    return@KeyboardActions
+                }else{
+                    onSearch(searchQueryState.value.trim())
+                    searchQueryState.value = ""
+                    keyboardController?.hide()
+                }
+            }
 
         )
     }
@@ -70,7 +82,9 @@ fun CustomTextField(
             textColor = colorResource(id = R.color.egg),
             containerColor = colorResource(id = R.color.dark_purple),
             focusedBorderColor = colorResource(id = R.color.baby_blue),
-            cursorColor = colorResource(id = R.color.baby_blue)
+            cursorColor = colorResource(id = R.color.baby_blue),
+            focusedSupportingTextColor = colorResource(id = R.color.egg),
+            unfocusedSupportingTextColor = colorResource(id = R.color.egg)
         ),
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier

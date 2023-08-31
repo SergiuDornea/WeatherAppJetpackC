@@ -1,17 +1,22 @@
 package com.example.weatherapp.screens.search
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.weatherapp.navigation.WeatherScreens
 import com.example.weatherapp.widgets.CustomSearchBar
 import com.example.weatherapp.widgets.WeatherAppBar
 
@@ -36,7 +41,14 @@ fun WeatherSearchScreen(navController: NavController){
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                CustomSearchBar()
+                CustomSearchBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .align(Alignment.CenterHorizontally)
+                ){
+                    navController.navigate(WeatherScreens.MainScreen.name + "/$it")
+                }
 
 
             }

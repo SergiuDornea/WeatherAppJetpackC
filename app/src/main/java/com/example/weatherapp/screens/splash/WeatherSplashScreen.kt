@@ -44,7 +44,7 @@ fun WeatherSplashScreen(navController: NavController = rememberNavController()) 
     val scale = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
-
+    val defaultCity = "Cluj"
     LaunchedEffect(key1 = true, block = {
         scale.animateTo(
             targetValue = 0.9f,
@@ -55,7 +55,7 @@ fun WeatherSplashScreen(navController: NavController = rememberNavController()) 
                 })
         )
         delay(2000L)
-        navController.navigate(route = WeatherScreens.MainScreen.name)
+        navController.navigate(route = WeatherScreens.MainScreen.name+ "/$defaultCity")
 
     })
     Box(

@@ -45,7 +45,11 @@ import com.example.weatherapp.widgets.WeatherAppBar
 import com.example.weatherapp.widgets.WeatherDetails
 
 @Composable
-fun WeatherMainScreen(navController: NavController, mainViewModel: MainViewModel = hiltViewModel()){
+fun WeatherMainScreen(
+    navController: NavController,
+    mainViewModel: MainViewModel = hiltViewModel(),
+    city: String?
+){
     val weatherData = produceState<DataOrException<CityWeather,Boolean, Exception>>(
         initialValue = DataOrException(loading = true)
     ){
