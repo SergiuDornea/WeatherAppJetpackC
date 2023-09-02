@@ -157,7 +157,7 @@ fun MainContent(
 
 
                     Text(
-                        text = data.main.temp.toString() + "°",
+                        text = data.main.temp.toInt().toString() + "°",
                         color = colorResource(id = R.color.egg),
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold
@@ -214,13 +214,7 @@ fun MainContent(
                 )
 
             }
-            // TODO add a  more info section , and replace dummy data
-            Divider(
-                thickness = 3.dp,
-                color = colorResource(id = R.color.dark_purple),
-                modifier = Modifier.padding(top = 10.dp)
 
-                )
 
             Box(
                 modifier = Modifier
@@ -229,7 +223,6 @@ fun MainContent(
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                colorResource(id = R.color.baby_blue),
                                 colorResource(id = R.color.light_purple),
                                 colorResource(id = R.color.dark_purple),
 
@@ -239,7 +232,7 @@ fun MainContent(
                 contentAlignment = Alignment.TopCenter
 
             ) {
-                Column {
+                Column (modifier = Modifier.padding(top = 20.dp)){
                     Text(
                         text = "More info:",
                         fontWeight = FontWeight.SemiBold,
