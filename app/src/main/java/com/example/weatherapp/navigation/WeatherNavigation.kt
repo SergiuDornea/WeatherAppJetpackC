@@ -1,15 +1,19 @@
 package com.example.weatherapp.navigation
 
 import androidx.compose.runtime.Composable
+
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.weatherapp.screens.WeatherAboutScreen
+import com.example.weatherapp.screens.favorite.WeatherFavoriteScreen
 import com.example.weatherapp.screens.main.MainViewModel
 import com.example.weatherapp.screens.main.WeatherMainScreen
 import com.example.weatherapp.screens.search.WeatherSearchScreen
+import com.example.weatherapp.screens.settings.WeatherSettingsScreen
 import com.example.weatherapp.screens.splash.WeatherSplashScreen
 
 @Composable
@@ -37,10 +41,24 @@ fun WeatherNavigation() {
                 }
             }
         }
-
         composable(WeatherScreens.SearchScreen.name){
             // create the actual screen
             WeatherSearchScreen(navController = navController)
+
+        }
+        composable(WeatherScreens.AboutScreen.name){
+            // create the actual screen
+            WeatherAboutScreen(navController = navController)
+
+        }
+        composable(WeatherScreens.SettingsScreen.name){
+            // create the actual screen
+            WeatherSettingsScreen(navController = navController)
+
+        }
+        composable(WeatherScreens.FavoriteScreen.name){
+            // create the actual screen
+            WeatherFavoriteScreen(navController = navController)
 
         }
     }

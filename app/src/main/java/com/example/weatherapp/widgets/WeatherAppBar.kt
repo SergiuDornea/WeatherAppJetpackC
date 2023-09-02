@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_EXPRESSION")
-
 package com.example.weatherapp.widgets
 
 import androidx.compose.foundation.background
@@ -36,9 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.weatherapp.R
+import com.example.weatherapp.navigation.WeatherScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 //@Preview
@@ -128,15 +128,22 @@ fun ShowDropDownSettingsMenu(showDialog: MutableState<Boolean>, navController: N
                              leadingIconColor= colorResource(id = R.color.dark_purple)
                              ),
                          leadingIcon = {
-                             Icon(imageVector = when(text){
-                                 "Favorites" -> Icons.Default.FavoriteBorder
-                                 "About" -> Icons.Default.Info
-                                 "Settings" -> Icons.Default.Settings
+                             Icon(imageVector = when(index){
+                                 0 -> Icons.Default.FavoriteBorder
+                                 1 -> Icons.Default.Info
+                                 2 -> Icons.Default.Settings
                                  else -> Icons.Default.Settings },
                                  contentDescription = null
                                  )
                          },
-                         onClick = { /*TODO*/ })
+                         onClick = {
+                             when(index){
+                                    0 -> navController.navigate(WeatherScreens.FavoriteScreen.name)
+                                    1 -> navController.navigate(WeatherScreens.AboutScreen.name)
+                                    2 -> navController.navigate(WeatherScreens.SettingsScreen.name)
+                                 else -> navController.navigate(WeatherScreens.SettingsScreen.name) }
+
+                         })
                 }
         }
     }
