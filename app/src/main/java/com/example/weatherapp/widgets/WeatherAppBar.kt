@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
@@ -31,14 +32,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.weatherapp.R
+import com.example.weatherapp.model.Favorite
 import com.example.weatherapp.navigation.WeatherScreens
+import com.example.weatherapp.screens.favorite.FavoriteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 //@Preview
@@ -48,6 +53,7 @@ fun WeatherAppBar(
     icon: ImageVector? = null,
     isOnMainScreen: Boolean = true,
     navController: NavController,
+    favViewModel: FavoriteViewModel = hiltViewModel(),
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
 ){
@@ -72,6 +78,7 @@ fun WeatherAppBar(
         ),
         actions = {
                   if(isOnMainScreen){
+
                       IconButton(onClick = { onAddActionClicked()}) {
                           Icon(imageVector =  Icons.Default.Search, contentDescription = "Search icon")
                       }
@@ -87,6 +94,7 @@ fun WeatherAppBar(
         },
         navigationIcon = {
             if(icon != null){
+
                 Icon(imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier.clickable{
@@ -94,6 +102,24 @@ fun WeatherAppBar(
                     }
                     )
 
+            }
+            // add hart icon
+            if(isOnMainScreen){
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "favorite icon",
+                    modifier = Modifier
+                        .scale(0.9f)
+                        .clickable {
+                                   favViewModel
+                                       .insertFav(Favorite(
+                                           city = title.split(",")[0],
+                                           country = title.split(",")[1]
+                                       ))
+                        },
+                    tint = Color.Red.copy(alpha = 0.6f)
+
+                    )
             }
         }
 
