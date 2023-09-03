@@ -38,6 +38,7 @@ fun WeatherAboutScreen(navController: NavController){
             modifier = Modifier
                 .fillMaxSize()
                 .background(colorResource(id = R.color.light_purple)),
+
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
             ) {
