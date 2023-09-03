@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -68,6 +69,7 @@ fun WeatherAppBar(
         title = { Text(
             text = title,
             fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(start = 50.dp)
 
         ) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
