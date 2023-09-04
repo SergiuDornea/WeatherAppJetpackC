@@ -75,7 +75,7 @@ fun CustomListITem(favorite: Favorite, favoriteViewModel: FavoriteViewModel, nav
             ) {
                 Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = favorite.country,
+                        text = favorite.country.trim(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
                     )
