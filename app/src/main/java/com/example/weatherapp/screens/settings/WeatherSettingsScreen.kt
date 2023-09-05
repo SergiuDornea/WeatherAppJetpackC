@@ -1,14 +1,18 @@
 package com.example.weatherapp.screens.settings
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Scaffold
@@ -23,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.weatherapp.R
 import com.example.weatherapp.widgets.WeatherAppBar
@@ -30,7 +35,7 @@ import com.example.weatherapp.widgets.WeatherAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun WeatherSettingsScreen(navController: NavController){
+fun WeatherSettingsScreen(navController: NavController, settingsViewModel: SettingsViewModel = hiltViewModel()){
    var unitToggleState = remember { mutableStateOf(false) }
    val measurementUnits = listOf("Imperial (F)", "Metric (C)")
    var choiceState = remember { mutableStateOf("") }
@@ -39,7 +44,10 @@ fun WeatherSettingsScreen(navController: NavController){
       navController = navController,
       icon = Icons.Default.ArrowBack,
       isOnMainScreen = false
-      )}) {
+      ){
+      // return when arrow clicked
+      navController.popBackStack()
+   }}) {
          Surface(
             modifier = Modifier.fillMaxSize(),
             color = colorResource(id = R.color.light_purple)
@@ -70,7 +78,21 @@ fun WeatherSettingsScreen(navController: NavController){
 
                   ){
                   Text(text = if(unitToggleState.value) "Fahrenheit °F" else "Celsius °C", color= colorResource(id = R.color.egg))
-
+               }
+               
+               Button(
+                  onClick = { /*TODO*/ },
+                  modifier = Modifier
+                     .padding(13.dp)
+                     .align(Alignment.CenterHorizontally),
+                  shape = RoundedCornerShape(15.dp),
+                  colors = ButtonDefaults.buttonColors(
+                     containerColor = colorResource(id = R.color.baby_blue),
+                     contentColor = colorResource(id = R.color.egg)
+                  ),
+                  border = BorderStroke(width = 2.dp, color = colorResource(id = R.color.dark_purple))
+                  ) {
+                  Text(text = "Save")
 
                }
             }
