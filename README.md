@@ -14,5 +14,5 @@ Weather API by:   https://openweathermap.org
 ![image](https://github.com/SergiuDornea/WeatherAppJetpackC/assets/88648596/ef98b819-f682-4428-a8ea-9708bbb99455)
 ![image](https://github.com/SergiuDornea/WeatherAppJetpackC/assets/88648596/5784d97e-b91c-47e4-b7f3-b7666141f2c3)
 ![image](https://github.com/SergiuDornea/WeatherAppJetpackC/assets/88648596/c2d5a360-df49-4f1a-beb6-565912f7b8c6)
-![image](https://github.com/SergiuDornea/WeatherAppJetpackC/assets/88648596/75314c46-d57d-473d-812b-63c467109ce3)
+![image](https://github.com/SergiuDornea/WeatherAppJetpackC/assets/88648596/4d5fa7a3-fff7-4283-9e0d-05b05dbb3c93)
 ![image](https://github.com/SergiuDornea/WeatherAppJetpackC/assets/88648596/38a737da-6b01-46fd-ac28-be6c2a4070a6)
