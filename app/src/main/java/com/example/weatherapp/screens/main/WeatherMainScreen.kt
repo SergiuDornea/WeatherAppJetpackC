@@ -16,13 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -38,6 +41,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.data.DataOrException
 import com.example.weatherapp.model.CityWeather
 import com.example.weatherapp.navigation.WeatherScreens
+import com.example.weatherapp.screens.settings.SettingsViewModel
 import com.example.weatherapp.utils.getDateTime
 import com.example.weatherapp.widgets.CustomDivider
 import com.example.weatherapp.widgets.CustomWeatherImgDescriber
@@ -48,26 +52,43 @@ import com.example.weatherapp.widgets.WeatherDetails
 fun WeatherMainScreen(
     navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     city: String?
 ){
-    val weatherData = produceState<DataOrException<CityWeather,Boolean, Exception>>(
-        initialValue = DataOrException(loading = true)
-    ){
-        value = city?.let { mainViewModel.getWeatherData(city = it) }!!
-    }.value
 
-    if(weatherData.loading == true){
-        CircularProgressIndicator()
-    }else if(weatherData.data != null){
-        MainScaffold(weatherData.data!!, navController)
+    val curCity: String = if(city.isNullOrBlank()) "Cluj" else city
+    val unitFromDb = settingsViewModel.unitsList.collectAsState().value
+    var unit = remember{ mutableStateOf("metric") }
+    var isMetric = remember{ mutableStateOf(false) }
+
+
+    if(!unitFromDb.isNullOrEmpty()){
+        unit.value = unitFromDb[0].unit.split(" ")[0].lowercase()
+        isMetric.value = unit.value == "metric"
+        val weatherData = produceState<DataOrException<CityWeather,Boolean, Exception>>(
+            initialValue = DataOrException(loading = true)
+        ){
+            value = city?.let { mainViewModel.getWeatherData(city = curCity , unit = unit.value) }!!
+        }.value
+
+        if(weatherData.loading == true){
+            CircularProgressIndicator()
+        }else if(weatherData.data != null){
+            MainScaffold(weatherData.data!!, navController, isMetric = isMetric)
+        }
     }
+
 
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScaffold(weather: CityWeather , navController: NavController){
+fun MainScaffold(
+    weather: CityWeather,
+    navController: NavController,
+    isMetric: MutableState<Boolean>
+){
 
     Scaffold(topBar = {
         WeatherAppBar(
@@ -81,14 +102,15 @@ fun MainScaffold(weather: CityWeather , navController: NavController){
             Log.d("TAG", "MainScaffold: Button clicked")
         }
     }) {
-         MainContent(data = weather)
+         MainContent(data = weather, isMetric = isMetric)
     }
 }
 
 
 @Composable
 fun MainContent(
-    data: CityWeather
+    data: CityWeather,
+    isMetric: MutableState<Boolean>
 ) {
     val dataList = listOf(
         data.coord.lat.toString(),
@@ -190,10 +212,20 @@ fun MainContent(
                     img = painterResource(id = R.drawable.humidity),
                     description = data.main.humidity.toString() + " %"
                 )
-                WeatherDetails(
-                    img = painterResource(id = R.drawable.wind),
-                    description = data.wind.speed.toString() + " km/h"
-                )
+                if (isMetric.value){
+                    WeatherDetails(
+                        img = painterResource(id = R.drawable.wind),
+                        description = data.wind.speed.toInt().toString() + " km/h"
+                    )
+
+                }else{
+                    WeatherDetails(
+                        img = painterResource(id = R.drawable.wind),
+                        description = data.wind.speed.toInt().toString() + " mph"
+                    )
+
+                }
+
             }
             CustomDivider()
             // sunset and sunrise
@@ -249,21 +281,21 @@ fun MainContent(
                     )
 
                     Text(
-                        text = "Feels like: "  + data.main.feels_like,
+                        text = "Feels like: "  + data.main.feels_like.toInt(),
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
                         modifier = Modifier
                             .padding(top = 10.dp)
                     )
                     Text(
-                        text = "Max temp: "  + data.main.temp_max,
+                        text = "Max temp: "  + data.main.temp_max.toInt(),
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
                         modifier = Modifier
                             .padding(top = 10.dp)
                     )
                     Text(
-                        text = "Min temp: " + data.main.temp_min,
+                        text = "Min temp: " + data.main.temp_min.toInt(),
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
                         modifier = Modifier

@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.weatherapp.R
+import com.example.weatherapp.model.Unit
 import com.example.weatherapp.widgets.WeatherAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +40,10 @@ import com.example.weatherapp.widgets.WeatherAppBar
 fun WeatherSettingsScreen(navController: NavController, settingsViewModel: SettingsViewModel = hiltViewModel()){
    var unitToggleState = remember { mutableStateOf(false) }
    val measurementUnits = listOf("Imperial (F)", "Metric (C)")
-   var choiceState = remember { mutableStateOf("") }
+   val choiceFromDb = settingsViewModel.unitsList.collectAsState().value
+   val defaultChoice = if(choiceFromDb.isNullOrEmpty()) measurementUnits[1]
+   else choiceFromDb[0].unit
+   var choiceState = remember { mutableStateOf(defaultChoice) }
    Scaffold(topBar = { WeatherAppBar(
       title = "Settings",
       navController = navController,
@@ -66,9 +71,10 @@ fun WeatherSettingsScreen(navController: NavController, settingsViewModel: Setti
                   onCheckedChange ={
                   unitToggleState.value = !it
                   if(unitToggleState.value) {
-                     choiceState.value = "Metric (C)"
-                  }else{
                      choiceState.value = "Imperial (F)"
+
+                  }else{
+                     choiceState.value = "Metric (C)"
                   } },
                   modifier = Modifier
                      .fillMaxWidth(0.5f)
@@ -81,7 +87,11 @@ fun WeatherSettingsScreen(navController: NavController, settingsViewModel: Setti
                }
                
                Button(
-                  onClick = { /*TODO*/ },
+                  onClick = {
+                     settingsViewModel.deleteAllUnits()
+                     settingsViewModel.insertUnit(Unit(unit = choiceState.value))
+
+                  },
                   modifier = Modifier
                      .padding(13.dp)
                      .align(Alignment.CenterHorizontally),

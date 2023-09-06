@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 // get the data from the WeatherApi and check
 class WeatherRepository @Inject constructor(private val api: WeatherApi) {
-    suspend fun getWeather(cityQuery: String, units: String = "metric" ) : DataOrException<CityWeather, Boolean , Exception>{
+    suspend fun getWeather(cityQuery: String, unit: String) : DataOrException<CityWeather, Boolean , Exception>{
         val response = try{
-            api.getWeather(query = cityQuery)
+            api.getWeather(query = cityQuery, units = unit)
         }catch (e: Exception){
             Log.d("REX", "getWeather: big  problem :)) ")
             return DataOrException(e = e)

@@ -43,4 +43,6 @@ interface WeatherDao {
 
     @Delete()
     suspend fun deleteUnit(unit: Unit)
+    @Query("DELETE FROM settings_tbl")
+    suspend fun deleteAllUnits()
 }
