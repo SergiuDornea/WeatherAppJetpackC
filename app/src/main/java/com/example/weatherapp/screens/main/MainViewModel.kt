@@ -1,7 +1,10 @@
 package com.example.weatherapp.screens.main
 
 
+import android.util.Log
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.DataOrException
 import com.example.weatherapp.model.CityWeather
 import com.example.weatherapp.repository.WeatherRepository
@@ -26,3 +29,5 @@ class MainViewModel @Inject constructor(private val repository: WeatherRepositor
 //    }
 
 }
+
+

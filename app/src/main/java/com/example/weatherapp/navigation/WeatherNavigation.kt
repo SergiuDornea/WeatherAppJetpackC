@@ -27,19 +27,14 @@ fun WeatherNavigation() {
         }
         val route = WeatherScreens.MainScreen.name
         composable(
-            "$route/{city}",
-            arguments = listOf(
-                navArgument(name = "city"){
-                    type = NavType.StringType
-                }
-        )){
+            route = "${WeatherScreens.MainScreen.name}/{city}",
+            arguments = listOf(navArgument("city") { type = NavType.StringType }
+        )){backStackEntry ->
             // create the actual screen
-            it.arguments?.getString("city").let {
-                val mainViewModel = hiltViewModel<MainViewModel>()
-                if (it != null) {
-                    WeatherMainScreen(navController = navController, mainViewModel , city = it)
-                }
-            }
+            val city = backStackEntry.arguments?.getString("city") ?: ""
+            val mainViewModel = hiltViewModel<MainViewModel>()
+            WeatherMainScreen(navController = navController, mainViewModel = mainViewModel, city = city)
+
         }
         composable(WeatherScreens.SearchScreen.name){
             // create the actual screen

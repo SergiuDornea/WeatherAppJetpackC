@@ -56,7 +56,7 @@ fun WeatherMainScreen(
     city: String?
 ){
 
-    val curCity: String = if(city.isNullOrBlank()) "Cluj" else city
+    val curCity: String = if(city.isNullOrBlank()) "Budapest" else city
     val unitFromDb = settingsViewModel.unitsList.collectAsState().value
     var unit = remember{ mutableStateOf("metric") }
     var isMetric = remember{ mutableStateOf(false) }
@@ -103,6 +103,8 @@ fun MainScaffold(
         }
     }) {
          MainContent(data = weather, isMetric = isMetric)
+        Log.d("MAI", "MAIN SCREEN")
+
     }
 }
 
