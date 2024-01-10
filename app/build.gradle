@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.example.weatherapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.weatherapp"
@@ -107,13 +107,11 @@ dependencies {
     kapt("androidx.room:room-compiler:2.5.2")
     implementation "androidx.room:room-ktx:2.5.2"
 
-
     // appium testing
-    androidTestImplementation 'io.appium:java-client:7.5.1'
-    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4-android:1.5.1")
+    testImplementation("androidx.compose.ui:ui-test-junit4-android:1.5.1")
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.6.0"
-
-
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
 
 }
 
