@@ -107,5 +107,13 @@ dependencies {
     kapt("androidx.room:room-compiler:2.5.2")
     implementation "androidx.room:room-ktx:2.5.2"
 
+
+    // appium testing
+    androidTestImplementation 'io.appium:java-client:7.5.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.6.0"
+
+
+
 }
 
